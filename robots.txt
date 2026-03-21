@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin.html
+Disallow: /firebase-config.js
+Disallow: /db.js
+
+Sitemap: https://vellfireholidays.com/sitemap.xml

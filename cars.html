@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="Car Rentals in Srinagar Kashmir – Innova, Innova Crysta, Tempo Traveller, Sedan with experienced drivers. Vellfire Holidays, Nawakadel Srinagar.">
+<meta name="keywords" content="car rental Srinagar, Innova on rent Kashmir, Tempo Traveller Srinagar, car hire Kashmir, Vellfire Holidays car rental">
+<title>Car Rentals Srinagar – Innova, Crysta, Tempo Traveller | Vellfire Holidays</title>
+<link rel="canonical" href="https://vellfireholidays.com/cars.html">
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="firebase-config.js"></script>
+<script src="db.js"></script>
+<style>
+.car-features{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.car-feat{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text2);background:var(--g50);border:1px solid var(--g200);padding:5px 11px;border-radius:50px}
+.car-feat i{color:var(--g500);font-size:11px}
+.why-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px}
+.why-item{text-align:center;padding:24px 18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px}
+.why-item i{font-size:28px;color:var(--g300);display:block;margin-bottom:12px}
+.why-item h4{color:var(--white);font-size:15px;margin-bottom:6px;font-family:'Playfair Display',serif}
+.why-item p{color:rgba(255,255,255,.45);font-size:13px;line-height:1.6}
+</style>
+</head>
+<body>
+<div id="loader">
+  <div class="ld-brand">Vellfire <span>Holidays</span></div>
+  <div class="ld-bar"><div class="ld-fill"></div></div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="nav" class="scrolled">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">🏔️</div>Vellfire <span>Holidays</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="tours.html">Tours</a></li>
+    <li><a href="cars.html">Car Rentals</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="book.html" class="nav-cta">Book Now</a></li>
+  </ul>
+  <div class="hamburger" id="ham"><span></span><span></span><span></span></div>
+</nav>
+<div class="mob-nav" id="mobnav">
+  <a href="index.html">Home</a>
+  <a href="tours.html">Tours</a>
+  <a href="cars.html">Car Rentals</a>
+  <a href="about.html" class="active">About</a>
+  <a href="contact.html">Contact</a>
+  <a href="book.html" class="mob-cta">Book Now</a>
+</div>
+
+
+<div class="page-hero">
+  <div class="page-hero-content">
+    <div class="page-hero-tag">🚗 Premium Fleet</div>
+    <h1 class="page-hero-title">Car <em>Rentals</em></h1>
+    <p class="page-hero-sub">Comfortable, clean vehicles with experienced Kashmir drivers — available 24/7</p>
+  </div>
+</div>
+
+<section>
+  <div class="section-head center rv">
+    <div class="eyebrow">Our Fleet</div>
+    <h2 class="section-title">Choose Your <em>Ride</em></h2>
+    <div class="divider"></div>
+    <p class="section-sub">All vehicles are well-maintained, AC-fitted, with GPS and experienced drivers who know every Kashmir road.</p>
+  </div>
+  <div class="grid-4" id="cars-grid">
+    <div class="empty-state" style="grid-column:1/-1"><i class="fa-solid fa-spinner fa-spin"></i></div>
+  </div>
+</section>
+
+<!-- Why Our Cars -->
+<section class="section-dark">
+  <div class="section-head center rv">
+    <div class="eyebrow eyebrow-dark">Why Choose Us</div>
+    <h2 class="section-title white">Drive <em>Kashmir</em> Safely</h2>
+    <div class="divider"></div>
+  </div>
+  <div class="why-grid">
+    <div class="why-item rv rv-d1"><i class="fa-solid fa-shield-halved"></i><h4>Insured Vehicles</h4><p>All cars carry full insurance for your peace of mind.</p></div>
+    <div class="why-item rv rv-d2"><i class="fa-solid fa-user-tie"></i><h4>Expert Drivers</h4><p>Local drivers with 10+ years of mountain road experience.</p></div>
+    <div class="why-item rv rv-d3"><i class="fa-solid fa-snowflake"></i><h4>AC & Comfort</h4><p>All vehicles are AC-equipped for Kashmir's varying weather.</p></div>
+    <div class="why-item rv rv-d4"><i class="fa-solid fa-clock"></i><h4>24/7 Available</h4><p>Available any time — early morning airport pickups included.</p></div>
+  </div>
+</section>
+
+<!-- Booking CTA -->
+<section>
+  <div style="background:linear-gradient(135deg,var(--g700),var(--g600));border-radius:28px;padding:clamp(40px,6vw,68px);text-align:center" class="rv">
+    <div class="eyebrow" style="color:var(--g200);justify-content:center">Quick Booking</div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(26px,4vw,40px);color:var(--white);margin-bottom:12px">Need a Car in <em style="color:var(--g300);font-style:italic">Srinagar?</em></h2>
+    <p style="color:rgba(255,255,255,.65);font-size:15.5px;max-width:480px;margin:0 auto 32px">Call or WhatsApp Shaiq Sajad directly for instant booking and best rates.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <a href="tel:+917889850927" class="btn"><i class="fa-solid fa-phone"></i><span>Call Now</span></a>
+      <a href="https://wa.me/917889850927?text=Hi%20Vellfire%20Holidays%2C%20I%20need%20a%20car%20rental." target="_blank" class="btn-outline"><i class="fa-brands fa-whatsapp"></i><span>WhatsApp</span></a>
+      <a href="book.html" class="btn-outline"><i class="fa-solid fa-calendar-check"></i><span>Book Online</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div><div class="footer-brand">Vellfire <span>Holidays</span></div><p class="footer-about">Premium car rentals in Srinagar. Innova, Innova Crysta, Tempo Traveller & Sedans with experienced drivers.</p><div class="footer-social"><a href="https://wa.me/917889850927"><i class="fa-brands fa-whatsapp"></i></a><a href="https://www.instagram.com/vellfire_holidays?utm_source=qr&igsh=MTRkdTdydWd6dnczdw=="><i class="fa-brands fa-instagram"></i></a><a href="https://www.facebook.com/share/1AvcsRSPPp/"><i class="fa-brands fa-facebook-f"></i></a></div></div>
+    <div class="footer-col"><h4>Pages</h4><ul class="footer-links"><li><a href="index.html">Home</a></li><li><a href="tours.html">Tours</a></li><li><a href="cars.html">Car Rentals</a></li><li><a href="book.html">Book Now</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-col"><h4>Our Fleet</h4><ul class="footer-links"><li><a href="cars.html">Innova</a></li><li><a href="cars.html">Innova Crysta</a></li><li><a href="cars.html">Tempo Traveller</a></li><li><a href="cars.html">Sedan</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4><div class="footer-contact-item"><i class="fa-solid fa-phone"></i><a href="tel:+917889850927">+91 7889850927</a></div><div class="footer-contact-item"><i class="fa-solid fa-envelope"></i><a href="mailto:vellfireholidays@gmail.com">vellfireholidays@gmail.com</a></div><div class="footer-contact-item"><i class="fa-solid fa-location-dot"></i><span>Nawakadel, Srinagar J&K</span></div></div>
+  </div>
+  <div class="footer-bottom"><p>© 2024 Vellfire Holidays | Shaiq Sajad, Srinagar J&K</p></div>
+</footer>
+
+<a href="https://wa.me/917889850927" target="_blank" class="wa-float"><i class="fa-brands fa-whatsapp"></i></a>
+<button class="scroll-top" id="scrtop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fa-solid fa-chevron-up"></i></button>
+
+<script>
+function renderCarCard(c){
+  var feats=(Array.isArray(c.features)?c.features:(c.features||'').split(',').map(function(s){return s.trim()})).filter(Boolean);
+  return '<div class="card rv"><div class="card-img" style="height:200px">'+
+    '<img src="'+(c.image||'')+'" alt="'+c.name+' car rental Srinagar Kashmir" loading="lazy" onerror="this.style.display=\'none\'">'+
+    '<span class="card-badge"><i class="fa-solid fa-users" style="font-size:10px"></i> '+c.seats+'</span>'+
+    '</div><div class="card-body"><h2 class="card-title">'+c.name+'</h2>'+
+    '<p class="card-desc">'+(c.description||'')+'</p>'+
+    '<div class="car-features">'+feats.map(function(f){return'<span class="car-feat"><i class="fa-solid fa-check"></i>'+f+'</span>'}).join('')+'</div>'+
+    '<div class="card-foot">'+
+    '<span style="font-family:\'Playfair Display\',serif;font-size:18px;font-weight:700;color:var(--g600)">'+(c.price||'Call for Price')+'</span>'+
+    '<a href="book.html" class="btn-sm"><i class="fa-solid fa-calendar-check"></i><span>Book Now</span></a></div></div></div>';
+}
+vfGetCars().then(function(cars){
+  document.getElementById('cars-grid').innerHTML=cars.map(renderCarCard).join('');
+  initReveal();
+});
+
+window.addEventListener('scroll',function(){document.getElementById('scrtop').classList.toggle('show',window.scrollY>400)});
+document.getElementById('ham').addEventListener('click',function(){this.classList.toggle('open');document.getElementById('mobnav').classList.toggle('open')});
+document.getElementById('mobnav').addEventListener('click',function(e){if(e.target.tagName==='A'){document.getElementById('ham').classList.remove('open');this.classList.remove('open')}});
+function initReveal(){var obs=new IntersectionObserver(function(entries){entries.forEach(function(el){if(el.isIntersecting){el.target.classList.add('on');obs.unobserve(el.target)}})},{threshold:.1,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.rv,.rvl,.rvr').forEach(function(el){if(!el.classList.contains('on'))obs.observe(el)})}
+window.addEventListener('load',function(){setTimeout(function(){document.getElementById('loader').classList.add('gone');initReveal();},1800)});
+setTimeout(initReveal,500);
+</script>
+</body>
+</html>

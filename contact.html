@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="Contact Vellfire Holidays in Srinagar – Phone: 7889850927, Email: vellfireholidays@gmail.com. Located at Nawakadel, Srinagar, J&K.">
+<meta name="keywords" content="Vellfire Holidays contact, Srinagar travel agency contact, Kashmir tour contact, Shaiq Sajad Srinagar">
+<title>Contact Vellfire Holidays – Srinagar, J&K | 7889850927</title>
+<link rel="canonical" href="https://vellfireholidays.com/contact.html">
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="firebase-config.js"></script>
+<script src="db.js"></script>
+<style>
+.contact-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:52px;align-items:start}
+.contact-info-col{display:flex;flex-direction:column;gap:18px}
+.ci-card{padding:24px 22px;border-radius:18px;display:flex;align-items:flex-start;gap:16px;background:var(--white);border:1px solid var(--line);box-shadow:var(--shadow);transition:var(--tr)}
+.ci-card:hover{transform:translateX(4px);border-color:var(--g200);box-shadow:var(--shadow2)}
+.ci-icon{width:48px;height:48px;border-radius:13px;background:linear-gradient(135deg,var(--g500),var(--g700));display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--white);flex-shrink:0;box-shadow:0 6px 18px rgba(32,135,90,.3)}
+.ci-label{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px}
+.ci-val{font-size:15px;color:var(--text);font-weight:500}
+.ci-val a{color:var(--text);transition:var(--tr)}
+.ci-val a:hover{color:var(--g600)}
+.contact-form-card{background:var(--white);border:1px solid var(--line);border-radius:26px;padding:clamp(26px,4vw,44px);box-shadow:var(--shadow2)}
+.contact-form-card h3{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--text);margin-bottom:6px}
+.contact-form-card>p{color:var(--muted);font-size:14px;margin-bottom:26px}
+.map-wrap{margin-top:64px;border-radius:22px;overflow:hidden;height:400px;border:1px solid var(--line);box-shadow:var(--shadow)}
+.map-wrap iframe{width:100%;height:100%;border:0;display:block}
+.social-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:52px}
+.social-link{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:16px;background:var(--white);border:1px solid var(--line);transition:var(--tr);box-shadow:var(--shadow)}
+.social-link:hover{transform:translateY(-4px);box-shadow:var(--shadow2)}
+.social-link.wa{border-color:rgba(37,211,102,.3)}
+.social-link.wa:hover{background:#f0fdf4;border-color:#25D366}
+.social-link.ig:hover{background:#fdf0f5;border-color:#e91e8c}
+.social-link.fb:hover{background:#f0f5ff;border-color:#1877f2}
+.social-link.em:hover{background:var(--g50);border-color:var(--g400)}
+.social-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.social-icon.wa{background:rgba(37,211,102,.12);color:#25D366}
+.social-icon.ig{background:rgba(233,30,140,.1);color:#e91e8c}
+.social-icon.fb{background:rgba(24,119,242,.1);color:#1877f2}
+.social-icon.em{background:var(--g50);color:var(--g600)}
+.social-text strong{display:block;font-size:14px;color:var(--text)}
+.social-text span{font-size:12px;color:var(--muted)}
+.form-success{display:none;background:linear-gradient(135deg,var(--g50),#e8f8f0);border:1px solid var(--g200);border-radius:12px;padding:18px;text-align:center;margin-top:14px}
+.form-success i{font-size:28px;color:var(--g500);display:block;margin-bottom:8px}
+@media(max-width:900px){.contact-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="loader">
+  <div class="ld-brand">Vellfire <span>Holidays</span></div>
+  <div class="ld-bar"><div class="ld-fill"></div></div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="nav" class="scrolled">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">🏔️</div>Vellfire <span>Holidays</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="tours.html">Tours</a></li>
+    <li><a href="cars.html">Car Rentals</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="book.html" class="nav-cta">Book Now</a></li>
+  </ul>
+  <div class="hamburger" id="ham"><span></span><span></span><span></span></div>
+</nav>
+<div class="mob-nav" id="mobnav">
+  <a href="index.html">Home</a>
+  <a href="tours.html">Tours</a>
+  <a href="cars.html">Car Rentals</a>
+  <a href="about.html" class="active">About</a>
+  <a href="contact.html">Contact</a>
+  <a href="book.html" class="mob-cta">Book Now</a>
+</div>
+
+
+<div class="page-hero">
+  <div class="page-hero-content">
+    <div class="page-hero-tag">📬 Reach Us</div>
+    <h1 class="page-hero-title">Get in <em>Touch</em></h1>
+    <p class="page-hero-sub">We're here to help you plan the perfect Kashmir trip</p>
+  </div>
+</div>
+
+<section>
+  <div class="contact-grid">
+    <div class="contact-info-col">
+      <div class="section-head rvl">
+        <div class="eyebrow">Contact Info</div>
+        <h2 class="section-title">Talk to <em>Shaiq Sajad</em></h2>
+        <div class="divider"></div>
+        <p class="section-sub">Reach out on any channel — we respond quickly on WhatsApp and phone.</p>
+      </div>
+      <div class="ci-card rvl rv-d1">
+        <div class="ci-icon"><i class="fa-solid fa-phone"></i></div>
+        <div><span class="ci-label">Phone</span><div class="ci-val"><a href="tel:+917889850927">+91 7889850927</a></div></div>
+      </div>
+      <div class="ci-card rvl rv-d2">
+        <div class="ci-icon"><i class="fa-brands fa-whatsapp"></i></div>
+        <div><span class="ci-label">WhatsApp</span><div class="ci-val"><a href="https://wa.me/917889850927" target="_blank">7889850927 – Chat Now</a></div></div>
+      </div>
+      <div class="ci-card rvl rv-d3">
+        <div class="ci-icon"><i class="fa-solid fa-envelope"></i></div>
+        <div><span class="ci-label">Email</span><div class="ci-val"><a href="mailto:vellfireholidays@gmail.com">vellfireholidays@gmail.com</a></div></div>
+      </div>
+      <div class="ci-card rvl rv-d4">
+        <div class="ci-icon"><i class="fa-solid fa-location-dot"></i></div>
+        <div><span class="ci-label">Address</span><div class="ci-val">Nawakadel, Srinagar,<br>Jammu & Kashmir, India</div></div>
+      </div>
+      <div class="ci-card rvl">
+        <div class="ci-icon"><i class="fa-solid fa-clock"></i></div>
+        <div><span class="ci-label">Working Hours</span><div class="ci-val">Mon–Sat: 9:00 AM – 7:00 PM<br>Sunday: 10:00 AM – 4:00 PM</div></div>
+      </div>
+      <div class="ci-card rvl">
+        <div class="ci-icon"><i class="fa-solid fa-globe"></i></div>
+        <div><span class="ci-label">Website</span><div class="ci-val"><a href="https://vellfireholidays.com" target="_blank">vellfireholidays.com</a></div></div>
+      </div>
+    </div>
+
+    <div class="contact-form-card rvr">
+      <h3>Send a <em style="font-style:italic;color:var(--g600)">Message</em></h3>
+      <p>Have a question or want to plan a trip? Fill out the form and we'll reply promptly.</p>
+      <div class="form-row">
+        <div class="form-group"><label>Your Name *</label><input type="text" id="c-name" placeholder="Full name"></div>
+        <div class="form-group"><label>Phone *</label><input type="tel" id="c-phone" placeholder="+91 XXXXX XXXXX"></div>
+      </div>
+      <div class="form-group"><label>Email</label><input type="email" id="c-email" placeholder="you@example.com"></div>
+      <div class="form-group">
+        <label>Subject</label>
+        <select id="c-subject">
+          <option value="">Select subject</option>
+          <option>Tour Package Enquiry</option>
+          <option>Car Rental Enquiry</option>
+          <option>Hotel Booking</option>
+          <option>Custom Itinerary</option>
+          <option>General Question</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Message *</label><textarea id="c-msg" placeholder="Your question or message..."></textarea></div>
+      <button class="btn" style="width:100%;justify-content:center" id="c-submit">
+        <i class="fa-solid fa-paper-plane"></i><span id="c-submit-txt">Send Message</span>
+      </button>
+      <div class="form-success" id="c-success">
+        <i class="fa-solid fa-circle-check"></i>
+        <strong style="color:var(--g700);display:block;margin-bottom:4px">Message Received!</strong>
+        <span style="color:var(--muted);font-size:13px">We'll get back to you within a few hours. You can also WhatsApp us for faster response.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Social Links -->
+  <div class="social-row">
+    <a href="https://wa.me/917889850927" target="_blank" class="social-link wa rv rv-d1">
+      <div class="social-icon wa"><i class="fa-brands fa-whatsapp"></i></div>
+      <div class="social-text"><strong>WhatsApp</strong><span>Message us directly</span></div>
+    </a>
+    <a href="mailto:vellfireholidays@gmail.com" class="social-link em rv rv-d2">
+      <div class="social-icon em"><i class="fa-solid fa-envelope"></i></div>
+      <div class="social-text"><strong>Email</strong><span>vellfireholidays@gmail.com</span></div>
+    </a>
+    <a href="https://www.instagram.com/vellfire_holidays?utm_source=qr&igsh=MTRkdTdydWd6dnczdw==" class="social-link ig rv rv-d3">
+      <div class="social-icon ig"><i class="fa-brands fa-instagram"></i></div>
+      <div class="social-text"><strong>Instagram</strong><span>Follow us</span></div>
+    </a>
+    <a href="https://www.facebook.com/share/1AvcsRSPPp/" class="social-link fb rv rv-d4">
+      <div class="social-icon fb"><i class="fa-brands fa-facebook-f"></i></div>
+      <div class="social-text"><strong>Facebook</strong><span>Follow our page</span></div>
+    </a>
+  </div>
+
+  <!-- Google Map -->
+  <div class="map-wrap rv">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13226.740706729903!2d74.93386240000001!3d34.026291199999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38e185450708fa09%3A0x6ceea5f45b4e512a!2sVellfire%20Holidays!5e0!3m2!1sen!2sin!4v1773826937880!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div><div class="footer-brand">Vellfire <span>Holidays</span></div><p class="footer-about">Premier tour & travel agency in Nawakadel, Srinagar. Tours, Car Rentals & Hotel Bookings by Shaiq Sajad.</p><div class="footer-social"><a href="https://wa.me/917889850927"><i class="fa-brands fa-whatsapp"></i></a><a href="https://www.instagram.com/vellfire_holidays?utm_source=qr&igsh=MTRkdTdydWd6dnczdw=="><i class="fa-brands fa-instagram"></i></a><a href="https://www.facebook.com/share/1AvcsRSPPp/"><i class="fa-brands fa-facebook-f"></i></a></div></div>
+    <div class="footer-col"><h4>Pages</h4><ul class="footer-links"><li><a href="index.html">Home</a></li><li><a href="tours.html">Tours</a></li><li><a href="cars.html">Car Rentals</a></li><li><a href="book.html">Book Now</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-col"><h4>Tours</h4><ul class="footer-links"><li><a href="tours.html">Gulmarg Tour</a></li><li><a href="tours.html">Pahalgam Tour</a></li><li><a href="tours.html">Sonamarg Tour</a></li><li><a href="tours.html">Full Package</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4><div class="footer-contact-item"><i class="fa-solid fa-phone"></i><a href="tel:+917889850927">+91 7889850927</a></div><div class="footer-contact-item"><i class="fa-solid fa-envelope"></i><a href="mailto:vellfireholidays@gmail.com">vellfireholidays@gmail.com</a></div><div class="footer-contact-item"><i class="fa-solid fa-location-dot"></i><span>Nawakadel, Srinagar J&K</span></div></div>
+  </div>
+  <div class="footer-bottom"><p>© 2024 Vellfire Holidays | Shaiq Sajad, Srinagar J&K</p><p><a href="https://vellfireholidays.com">vellfireholidays.com</a></p></div>
+</footer>
+
+<a href="https://wa.me/917889850927" target="_blank" class="wa-float"><i class="fa-brands fa-whatsapp"></i></a>
+<div class="toast" id="toast"></div>
+
+<script>
+function toast(msg,err){var t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(err?' err':'');setTimeout(function(){t.classList.remove('show')},3500)}
+document.getElementById('c-submit').addEventListener('click',function(){
+  var name=document.getElementById('c-name').value.trim();
+  var phone=document.getElementById('c-phone').value.trim();
+  var msg=document.getElementById('c-msg').value.trim();
+  if(!name||!phone||!msg){toast('Please fill Name, Phone and Message',true);return}
+  var btn=this;btn.disabled=true;document.getElementById('c-submit-txt').textContent='Sending...';
+  vfSaveBooking({
+    name:name,phone:phone,
+    email:document.getElementById('c-email').value.trim(),
+    service:document.getElementById('c-subject').value,
+    message:msg, type:'contact'
+  }).then(function(){
+    document.getElementById('c-success').style.display='block';
+    ['c-name','c-phone','c-email','c-msg'].forEach(function(id){document.getElementById(id).value=''});
+    document.getElementById('c-subject').selectedIndex=0;
+    document.getElementById('c-submit-txt').textContent='Send Message';
+    btn.disabled=false;
+    toast('Message sent! We\'ll reply soon ✓');
+  }).catch(function(){
+    document.getElementById('c-submit-txt').textContent='Send Message';
+    btn.disabled=false;
+    toast('Failed — please call us directly.',true);
+  });
+});
+document.getElementById('ham').addEventListener('click',function(){this.classList.toggle('open');document.getElementById('mobnav').classList.toggle('open')});
+document.getElementById('mobnav').addEventListener('click',function(e){if(e.target.tagName==='A'){document.getElementById('ham').classList.remove('open');this.classList.remove('open')}});
+function initReveal(){var obs=new IntersectionObserver(function(entries){entries.forEach(function(el){if(el.isIntersecting){el.target.classList.add('on');obs.unobserve(el.target)}})},{threshold:.1,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.rv,.rvl,.rvr').forEach(function(el){if(!el.classList.contains('on'))obs.observe(el)})}
+window.addEventListener('load',function(){setTimeout(function(){document.getElementById('loader').classList.add('gone');initReveal();},1800)});
+setTimeout(initReveal,500);
+</script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="Kashmir Tour Packages by Vellfire Holidays – Gulmarg, Pahalgam, Sonamarg & Full Kashmir packages. Best prices, guided tours from Srinagar J&K.">
+<meta name="keywords" content="Kashmir tour packages, Gulmarg tour, Pahalgam tour, Sonamarg tour, Full Kashmir holiday, Vellfire Holidays Srinagar">
+<title>Kashmir Tour Packages – Vellfire Holidays | Srinagar J&K</title>
+<link rel="canonical" href="https://vellfireholidays.com/tours.html">
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="firebase-config.js"></script>
+<script src="db.js"></script>
+<style>
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:48px}
+.f-btn{padding:10px 24px;border-radius:50px;border:1.5px solid var(--line);background:transparent;color:var(--text2);font-size:13.5px;font-weight:500;cursor:pointer;transition:var(--tr);font-family:'DM Sans',sans-serif}
+.f-btn:hover,.f-btn.on{background:linear-gradient(135deg,var(--g500),var(--g700));border-color:var(--g500);color:var(--white)}
+</style>
+</head>
+<body>
+<div id="loader">
+  <div class="ld-brand">Vellfire <span>Holidays</span></div>
+  <div class="ld-bar"><div class="ld-fill"></div></div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="nav" class="scrolled">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">🏔️</div>Vellfire <span>Holidays</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="tours.html">Tours</a></li>
+    <li><a href="cars.html">Car Rentals</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="book.html" class="nav-cta">Book Now</a></li>
+  </ul>
+  <div class="hamburger" id="ham"><span></span><span></span><span></span></div>
+</nav>
+<div class="mob-nav" id="mobnav">
+  <a href="index.html">Home</a>
+  <a href="tours.html">Tours</a>
+  <a href="cars.html">Car Rentals</a>
+  <a href="about.html" class="active">About</a>
+  <a href="contact.html">Contact</a>
+  <a href="book.html" class="mob-cta">Book Now</a>
+</div>
+
+
+<div class="page-hero">
+  <div class="page-hero-content">
+    <div class="page-hero-tag">🗺️ Explore Kashmir</div>
+    <h1 class="page-hero-title">Kashmir Tour <em>Packages</em></h1>
+    <p class="page-hero-sub">From snow-capped Gulmarg to lush Pahalgam — handcrafted tours for every traveler</p>
+  </div>
+</div>
+
+<section>
+  <div class="filter-bar rv" id="filter-bar">
+    <button class="f-btn on" onclick="doFilter('all',this)">All Packages</button>
+    <button class="f-btn" onclick="doFilter('Adventure',this)"><i class="fa-solid fa-mountain"></i> Adventure</button>
+    <button class="f-btn" onclick="doFilter('Nature',this)"><i class="fa-solid fa-leaf"></i> Nature</button>
+    <button class="f-btn" onclick="doFilter('Complete',this)"><i class="fa-solid fa-suitcase-rolling"></i> Complete</button>
+  </div>
+  <div class="grid-3" id="tours-grid">
+    <div class="empty-state" style="grid-column:1/-1"><i class="fa-solid fa-spinner fa-spin"></i><p>Loading packages...</p></div>
+  </div>
+</section>
+
+<!-- Why book with us -->
+<section class="section-bg">
+  <div class="section-head center rv">
+    <div class="eyebrow">Why Vellfire</div>
+    <h2 class="section-title">The <em>Vellfire Promise</em></h2>
+    <div class="divider"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:22px">
+    <div class="card rv rv-d1" style="padding:28px;text-align:center"><div style="font-size:32px;margin-bottom:12px">🛡️</div><h3 style="font-family:'Playfair Display',serif;font-size:18px;margin-bottom:8px">Safe & Insured</h3><p style="font-size:13.5px;color:var(--muted)">All tours are fully insured with certified guides.</p></div>
+    <div class="card rv rv-d2" style="padding:28px;text-align:center"><div style="font-size:32px;margin-bottom:12px">💰</div><h3 style="font-family:'Playfair Display',serif;font-size:18px;margin-bottom:8px">Best Prices</h3><p style="font-size:13.5px;color:var(--muted)">No hidden costs — transparent pricing always.</p></div>
+    <div class="card rv rv-d3" style="padding:28px;text-align:center"><div style="font-size:32px;margin-bottom:12px">🏨</div><h3 style="font-family:'Playfair Display',serif;font-size:18px;margin-bottom:8px">Quality Hotels</h3><p style="font-size:13.5px;color:var(--muted)">Handpicked stays from houseboats to resorts.</p></div>
+    <div class="card rv rv-d4" style="padding:28px;text-align:center"><div style="font-size:32px;margin-bottom:12px">📱</div><h3 style="font-family:'Playfair Display',serif;font-size:18px;margin-bottom:8px">24/7 Support</h3><p style="font-size:13.5px;color:var(--muted)">Always reachable on call and WhatsApp.</p></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div><div class="footer-brand">Vellfire <span>Holidays</span></div><p class="footer-about">Premier tour & travel agency in Srinagar, J&K. Tours, Car Rentals & Hotel Bookings.</p><div class="footer-social"><a href="https://wa.me/917889850927"><i class="fa-brands fa-whatsapp"></i></a><a href="https://www.instagram.com/vellfire_holidays?utm_source=qr&igsh=MTRkdTdydWd6dnczdw=="><i class="fa-brands fa-instagram"></i></a><a href="https://www.facebook.com/share/1AvcsRSPPp/"><i class="fa-brands fa-facebook-f"></i></a></div></div>
+    <div class="footer-col"><h4>Pages</h4><ul class="footer-links"><li><a href="index.html">Home</a></li><li><a href="tours.html">Tours</a></li><li><a href="cars.html">Car Rentals</a></li><li><a href="book.html">Book Now</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-col"><h4>Tours</h4><ul class="footer-links"><li><a href="tours.html">Gulmarg Tour</a></li><li><a href="tours.html">Pahalgam Tour</a></li><li><a href="tours.html">Sonamarg Tour</a></li><li><a href="tours.html">Full Package</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4><div class="footer-contact-item"><i class="fa-solid fa-phone"></i><a href="tel:+917889850927">+91 7889850927</a></div><div class="footer-contact-item"><i class="fa-solid fa-envelope"></i><a href="mailto:vellfireholidays@gmail.com">vellfireholidays@gmail.com</a></div><div class="footer-contact-item"><i class="fa-solid fa-location-dot"></i><span>Nawakadel, Srinagar J&K</span></div></div>
+  </div>
+  <div class="footer-bottom"><p>© 2024 Vellfire Holidays | Shaiq Sajad, Srinagar J&K</p><p><a href="https://vellfireholidays.com">vellfireholidays.com</a></p></div>
+</footer>
+
+<a href="https://wa.me/917889850927" target="_blank" class="wa-float"><i class="fa-brands fa-whatsapp"></i></a>
+<button class="scroll-top" id="scrtop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fa-solid fa-chevron-up"></i></button>
+
+<script>
+var allTours=[], curFilter='all';
+function renderTourCard(t){
+  var price=Number(t.price).toLocaleString('en-IN');
+  var orig=t.originalPrice?'<span class="orig">₹'+Number(t.originalPrice).toLocaleString('en-IN')+'</span>':'';
+  var inc=(Array.isArray(t.inclusions)?t.inclusions:(t.inclusions||'').split(',').map(function(s){return s.trim()})).filter(Boolean);
+  return '<div class="card rv"><div class="card-img" style="height:220px">'+
+    '<img src="'+(t.image||'')+'" alt="'+t.title+' Kashmir" loading="lazy" onerror="this.style.display=\'none\'">'+
+    (t.category?'<span class="card-badge">'+t.category+'</span>':'')+
+    '</div><div class="card-body"><h3 class="card-title">'+t.title+'</h3>'+
+    '<div class="card-meta"><span><i class="fa-solid fa-clock"></i>'+t.duration+'</span><span><i class="fa-solid fa-location-dot"></i>Kashmir J&K</span></div>'+
+    '<p class="card-desc">'+(t.description||'')+'</p>'+
+    '<div>'+inc.map(function(i){return'<span class="chip">'+i+'</span>'}).join('')+'</div>'+
+    '<div class="card-foot"><div><div style="font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px">Starting From</div>'+
+    '<div class="card-price">'+orig+'₹'+price+'<small>/person</small></div></div>'+
+    '<a href="book.html" class="btn-sm">Book Now</a></div></div></div>';
+}
+function doFilter(cat,btn){
+  curFilter=cat;
+  document.querySelectorAll('.f-btn').forEach(function(b){b.classList.remove('on')});
+  btn.classList.add('on');
+  var list=cat==='all'?allTours:allTours.filter(function(t){return t.category===cat});
+  document.getElementById('tours-grid').innerHTML=list.length?list.map(renderTourCard).join(''):'<div class="empty-state" style="grid-column:1/-1"><i class="fa-solid fa-suitcase-rolling"></i><p>No packages in this category.</p></div>';
+  initReveal();
+}
+window.doFilter=doFilter;
+vfGetTours().then(function(tours){allTours=tours;doFilter('all',document.querySelector('.f-btn.on'))});
+
+window.addEventListener('scroll',function(){document.getElementById('nav').classList.toggle('scrolled',true);document.getElementById('scrtop').classList.toggle('show',window.scrollY>400)});
+document.getElementById('ham').addEventListener('click',function(){this.classList.toggle('open');document.getElementById('mobnav').classList.toggle('open')});
+document.getElementById('mobnav').addEventListener('click',function(e){if(e.target.tagName==='A'){document.getElementById('ham').classList.remove('open');this.classList.remove('open')}});
+function initReveal(){var obs=new IntersectionObserver(function(entries){entries.forEach(function(el){if(el.isIntersecting){el.target.classList.add('on');obs.unobserve(el.target)}})},{threshold:.1,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.rv,.rvl,.rvr').forEach(function(el){if(!el.classList.contains('on'))obs.observe(el)})}
+window.addEventListener('load',function(){setTimeout(function(){document.getElementById('loader').classList.add('gone');initReveal();},1800)});
+setTimeout(initReveal,500);
+</script>
+</body>
+</html>

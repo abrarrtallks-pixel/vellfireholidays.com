@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Admin Panel – Vellfire Holidays</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="firebase-config.js"></script>
+<script src="db.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=DM+Sans:wght@400;500;600;700&display=swap');
+:root{
+  --g900:#0a2418;--g800:#0e3322;--g700:#155c38;--g600:#1a7048;--g500:#20875a;--g400:#2da670;--g300:#5cc195;--g200:#a8e2c8;
+  --bg:#f4f8f5;--white:#fff;--text:#1a2e22;--text2:#3d5447;--muted:#7a9988;--line:#daeee3;
+  --tr:all .3s cubic-bezier(.25,1,.5,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── LOGIN ── */
+#login{position:fixed;inset:0;z-index:9999;background:linear-gradient(160deg,var(--g900),var(--g700));display:flex;align-items:center;justify-content:center;padding:20px}
+#login.hide{display:none}
+.lbox{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:48px 44px;width:420px;max-width:100%;text-align:center;backdrop-filter:blur(20px)}
+.lbox-logo{font-family:'Playfair Display',serif;font-size:28px;color:#fff;margin-bottom:6px}
+.lbox-logo span{color:var(--g300)}
+.lbox-sub{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:28px}
+.lfg{text-align:left;margin-bottom:14px}
+.lfg label{display:block;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:7px}
+.lfg input{width:100%;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.12);border-radius:10px;padding:13px 16px;color:#fff;font-size:14px;outline:none;transition:var(--tr);font-family:'DM Sans',sans-serif}
+.lfg input:focus{border-color:var(--g400);background:rgba(255,255,255,.1)}
+.l-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--g500),var(--g700));color:#fff;border:none;border-radius:50px;font-size:15px;font-weight:600;cursor:pointer;transition:var(--tr);font-family:'DM Sans',sans-serif;margin-top:8px}
+.l-btn:hover{background:linear-gradient(135deg,var(--g400),var(--g600))}
+.l-err{color:#ff6b6b;font-size:13px;margin-top:10px;display:none}
+.fb-badge{margin-bottom:18px;padding:10px 16px;border-radius:10px;font-size:12px}
+.fb-live{background:rgba(45,166,112,.15);border:1px solid var(--g500);color:#6dffa0}
+.fb-local{background:rgba(255,200,0,.08);border:1px solid rgba(255,200,0,.2);color:#ffc800}
+
+/* ── SIDEBAR ── */
+.sidebar{width:245px;background:var(--g900);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.sidebar-logo{padding:20px 22px;font-family:'Playfair Display',serif;font-size:18px;color:#fff;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:8px}
+.sidebar-logo span{color:var(--g300)}
+.sidebar-logo a{margin-left:auto;color:rgba(255,255,255,.35);font-size:11px;text-decoration:none;transition:var(--tr)}
+.sidebar-logo a:hover{color:var(--g300)}
+.sidebar-nav{flex:1;padding:10px 0}
+.s-item{display:flex;align-items:center;gap:11px;padding:12px 22px;color:rgba(255,255,255,.5);font-size:13.5px;cursor:pointer;transition:var(--tr);border-left:3px solid transparent;user-select:none}
+.s-item:hover{color:rgba(255,255,255,.85);background:rgba(255,255,255,.04)}
+.s-item.on{color:var(--g300);background:rgba(45,166,112,.08);border-left-color:var(--g400)}
+.s-item i{width:16px;flex-shrink:0}
+.sidebar-foot{padding:18px}
+.logout-btn{width:100%;padding:10px;background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.25);border-radius:10px;color:#ff6b6b;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;transition:var(--tr)}
+.logout-btn:hover{background:#c0392b;color:#fff;border-color:#c0392b}
+
+/* ── MAIN ── */
+.main{flex:1;overflow-y:auto;padding:28px 28px 40px}
+.asec{display:none}.asec.on{display:block}
+.page-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:600;color:var(--text);margin-bottom:22px}
+
+/* ── STAT CARDS ── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.stat-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center;box-shadow:0 2px 12px rgba(10,36,24,.06)}
+.stat-n{font-family:'Playfair Display',serif;font-size:30px;font-weight:600;color:var(--g600)}
+.stat-l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px}
+
+/* ── CARDS/GRID ── */
+.panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.panel-card{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 2px 12px rgba(10,36,24,.06)}
+.panel-card h3{font-family:'Playfair Display',serif;font-size:18px;color:var(--text);margin-bottom:18px}
+
+/* ── FORM ── */
+.fg{margin-bottom:14px}
+.fg label{display:block;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.fg input,.fg textarea,.fg select{width:100%;background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:11px 14px;color:var(--text);font-size:13.5px;outline:none;transition:var(--tr);font-family:'DM Sans',sans-serif}
+.fg input:focus,.fg textarea:focus{border-color:var(--g400);background:#fff;box-shadow:0 0 0 3px rgba(32,135,90,.08)}
+.fg textarea{min-height:70px;resize:vertical}
+.fg select option{background:#fff}
+.fg select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237a9988' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:36px}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.img-preview{display:none;margin-bottom:10px;border-radius:10px;overflow:hidden;height:110px;background:var(--bg)}
+.img-preview img{width:100%;height:100%;object-fit:cover}
+.btn-save{padding:10px 22px;background:linear-gradient(135deg,var(--g500),var(--g700));color:#fff;border:none;border-radius:50px;font-size:13px;font-weight:600;cursor:pointer;transition:var(--tr);font-family:'DM Sans',sans-serif}
+.btn-save:hover{background:linear-gradient(135deg,var(--g400),var(--g600))}
+.btn-save:disabled{opacity:.5;cursor:not-allowed}
+.btn-reset{padding:10px 18px;background:transparent;color:var(--muted);border:1.5px solid var(--line);border-radius:50px;font-size:13px;cursor:pointer;transition:var(--tr);font-family:'DM Sans',sans-serif}
+.btn-reset:hover{border-color:var(--g400);color:var(--g600)}
+
+/* ── LIST ── */
+.item-list{max-height:480px;overflow-y:auto;display:flex;flex-direction:column;gap:8px}
+.item{background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;transition:var(--tr)}
+.item:hover{border-color:var(--g300);background:#fff}
+.item-info h4{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.item-info p{font-size:11.5px;color:var(--muted);line-height:1.4}
+.item-acts{display:flex;gap:6px;flex-shrink:0}
+.btn-edit{padding:5px 12px;font-size:11.5px;border-radius:8px;border:1px solid var(--g400);background:rgba(32,135,90,.06);color:var(--g600);cursor:pointer;font-family:'DM Sans',sans-serif;transition:var(--tr)}
+.btn-edit:hover{background:var(--g500);color:#fff;border-color:var(--g500)}
+.btn-del{padding:5px 12px;font-size:11.5px;border-radius:8px;border:1px solid rgba(192,57,43,.25);background:rgba(192,57,43,.06);color:#c0392b;cursor:pointer;font-family:'DM Sans',sans-serif;transition:var(--tr)}
+.btn-del:hover{background:#c0392b;color:#fff}
+.thumb{width:52px;height:38px;border-radius:8px;object-fit:cover;flex-shrink:0;background:var(--line)}
+
+/* ── BOOKING ITEM ── */
+.booking-item{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:16px;margin-bottom:10px}
+.booking-item h4{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.booking-item p{font-size:13px;color:var(--text2);line-height:1.6}
+.booking-msg{margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-size:13px;color:var(--text)}
+.badge-new{background:linear-gradient(135deg,var(--g500),var(--g700));color:#fff;font-size:10px;font-weight:700;padding:2px 9px;border-radius:50px;letter-spacing:.5px}
+.badge-service{background:var(--g50);color:var(--g700);font-size:10px;padding:3px 10px;border-radius:50px;border:1px solid var(--g200);}
+@define --g50: #f0faf5;
+
+/* ── FB STATUS ── */
+.fb-panel{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:18px}
+.fb-panel h4{font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px}
+.fb-panel p{font-size:13px;color:var(--muted)}
+
+/* ── TOAST ── */
+.toast{position:fixed;top:18px;right:18px;background:var(--g600);color:#fff;padding:12px 20px;border-radius:12px;font-size:13.5px;z-index:9000;opacity:0;transform:translateY(-12px);transition:var(--tr);pointer-events:none;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.err{background:#c0392b}
+
+/* ── empty state ── */
+.list-empty{text-align:center;padding:36px;color:var(--muted);font-size:13px}
+
+@media(max-width:1100px){.stats-row{grid-template-columns:1fr 1fr}.panel-grid{grid-template-columns:1fr}}
+@media(max-width:700px){.sidebar{width:0;overflow:hidden}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="lbox">
+    <div style="font-size:36px;margin-bottom:10px">🏔️</div>
+    <div class="lbox-logo">Vellfire <span>Holidays</span></div>
+    <div class="lbox-sub">Admin Panel — Shaiq Sajad</div>
+    <div id="fb-badge" class="fb-badge fb-local">💾 localStorage mode</div>
+    <div class="lfg"><label>Email</label><input type="email" id="le" value="vellfireholidays@gmail.com"></div>
+    <div class="lfg"><label>Password</label><input type="password" id="lp" placeholder="Enter password"></div>
+    <button class="l-btn" id="lbtn"><i class="fa-solid fa-right-to-bracket"></i> Login to Admin</button>
+    <div class="l-err" id="lerr">Incorrect credentials. Try again.</div>
+    <a href="index.html" style="display:block;margin-top:16px;font-size:12px;color:rgba(255,255,255,.3);text-decoration:none">← Back to Website</a>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-logo">🏔️ Admin <a href="index.html" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square" style="font-size:11px"></i></a></div>
+  <nav class="sidebar-nav">
+    <div class="s-item on" data-sec="dashboard"><i class="fa-solid fa-gauge-high"></i> Dashboard</div>
+    <div class="s-item" data-sec="tours"><i class="fa-solid fa-map-location-dot"></i> Tours</div>
+    <div class="s-item" data-sec="cars"><i class="fa-solid fa-car-side"></i> Car Rentals</div>
+    <div class="s-item" data-sec="reviews"><i class="fa-solid fa-star"></i> Reviews</div>
+    <div class="s-item" data-sec="bookings"><i class="fa-solid fa-inbox"></i> Bookings</div>
+  </nav>
+  <div class="sidebar-foot"><button class="logout-btn" id="lobtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- DASHBOARD -->
+  <div class="asec on" id="sec-dashboard">
+    <div class="page-title">📊 Dashboard</div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-n" id="st-t">—</div><div class="stat-l">Tours</div></div>
+      <div class="stat-card"><div class="stat-n" id="st-c">—</div><div class="stat-l">Cars</div></div>
+      <div class="stat-card"><div class="stat-n" id="st-r">—</div><div class="stat-l">Reviews</div></div>
+      <div class="stat-card"><div class="stat-n" id="st-b">—</div><div class="stat-l">Bookings</div></div>
+    </div>
+    <div class="fb-panel">
+      <h4>🔥 Firebase Status</h4>
+      <p id="fb-status-txt">Checking...</p>
+    </div>
+    <div class="panel-card" style="max-width:400px">
+      <h3>Quick Actions</h3>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="btn-save" onclick="goSec('tours')"><i class="fa-solid fa-plus"></i> Add New Tour</button>
+        <button class="btn-save" onclick="goSec('cars')"><i class="fa-solid fa-car-side"></i> Add New Car</button>
+        <button class="btn-save" onclick="goSec('reviews')"><i class="fa-solid fa-star"></i> Add Review</button>
+        <button class="btn-save" onclick="goSec('bookings')"><i class="fa-solid fa-inbox"></i> View Bookings</button>
+        <a href="index.html" target="_blank" class="btn-save" style="display:flex;align-items:center;gap:8px;justify-content:center;text-decoration:none"><i class="fa-solid fa-eye"></i> View Live Website</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOURS -->
+  <div class="asec" id="sec-tours">
+    <div class="page-title">🗺️ Manage Tours</div>
+    <div class="panel-grid">
+      <div class="panel-card">
+        <h3 id="tour-form-title">Add Tour Package</h3>
+        <input type="hidden" id="et-id">
+        <div class="fg"><label>Tour Title *</label><input id="t-title" placeholder="e.g. Gulmarg Snow Adventure"></div>
+        <div class="r2">
+          <div class="fg"><label>Category</label><select id="t-cat"><option>Adventure</option><option>Nature</option><option>Complete</option><option>Cultural</option></select></div>
+          <div class="fg"><label>Duration *</label><input id="t-dur" placeholder="2 Days / 1 Night"></div>
+        </div>
+        <div class="r2">
+          <div class="fg"><label>Price (₹) *</label><input type="number" id="t-price" placeholder="3499"></div>
+          <div class="fg"><label>Original Price (₹)</label><input type="number" id="t-oprice" placeholder="4500"></div>
+        </div>
+        <div class="fg"><label>Image URL</label><input id="t-img" placeholder="https://...photo.jpg"></div>
+        <div class="img-preview" id="t-img-prev"><img id="t-img-el" src="" alt="Preview"></div>
+        <div class="fg"><label>Description</label><textarea id="t-desc" placeholder="Tour highlights and details..."></textarea></div>
+        <div class="fg"><label>Inclusions (comma separated)</label><input id="t-inc" placeholder="Hotel, Meals, Guide, Transport"></div>
+        <div style="display:flex;gap:8px;margin-top:6px">
+          <button class="btn-save" id="t-save-btn">Save Tour</button>
+          <button class="btn-reset" id="t-reset-btn">Reset</button>
+        </div>
+      </div>
+      <div class="panel-card">
+        <h3>All Tours <span id="t-count" style="font-size:13px;color:var(--muted)"></span></h3>
+        <div class="item-list" id="t-list"><div class="list-empty"><i class="fa-solid fa-spinner fa-spin"></i></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARS -->
+  <div class="asec" id="sec-cars">
+    <div class="page-title">🚗 Manage Car Rentals</div>
+    <div class="panel-grid">
+      <div class="panel-card">
+        <h3 id="car-form-title">Add Car</h3>
+        <input type="hidden" id="ec-id">
+        <div class="fg"><label>Car Name *</label><input id="c-name" placeholder="e.g. Innova Crysta"></div>
+        <div class="r2">
+          <div class="fg"><label>Seats</label><input id="c-seats" placeholder="7 Seater"></div>
+          <div class="fg"><label>Price</label><input id="c-price" placeholder="₹3,200/day"></div>
+        </div>
+        <div class="fg"><label>Image URL</label><input id="c-img" placeholder="https://...car.jpg"></div>
+        <div class="img-preview" id="c-img-prev"><img id="c-img-el" src="" alt="Preview"></div>
+        <div class="fg"><label>Description</label><textarea id="c-desc" placeholder="Vehicle description..."></textarea></div>
+        <div class="fg"><label>Features (comma separated)</label><input id="c-feats" placeholder="AC, 7 Seats, Driver, GPS"></div>
+        <div style="display:flex;gap:8px;margin-top:6px">
+          <button class="btn-save" id="c-save-btn">Save Car</button>
+          <button class="btn-reset" id="c-reset-btn">Reset</button>
+        </div>
+      </div>
+      <div class="panel-card">
+        <h3>All Cars <span id="c-count" style="font-size:13px;color:var(--muted)"></span></h3>
+        <div class="item-list" id="c-list"><div class="list-empty"><i class="fa-solid fa-spinner fa-spin"></i></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVIEWS -->
+  <div class="asec" id="sec-reviews">
+    <div class="page-title">⭐ Manage Reviews</div>
+    <div class="panel-grid">
+      <div class="panel-card">
+        <h3 id="rev-form-title">Add Review</h3>
+        <input type="hidden" id="er-id">
+        <div class="fg"><label>Client Name *</label><input id="r-name" placeholder="e.g. Rahul Verma"></div>
+        <div class="r2">
+          <div class="fg"><label>Location</label><input id="r-loc" placeholder="New Delhi"></div>
+          <div class="fg"><label>Rating</label><select id="r-rat"><option value="5">5 Stars ⭐⭐⭐⭐⭐</option><option value="4">4 Stars ⭐⭐⭐⭐</option><option value="3">3 Stars ⭐⭐⭐</option></select></div>
+        </div>
+        <div class="fg"><label>Review Text *</label><textarea id="r-text" placeholder="What did the client say?"></textarea></div>
+        <div style="display:flex;gap:8px;margin-top:6px">
+          <button class="btn-save" id="r-save-btn">Save Review</button>
+          <button class="btn-reset" id="r-reset-btn">Reset</button>
+        </div>
+      </div>
+      <div class="panel-card">
+        <h3>All Reviews <span id="r-count" style="font-size:13px;color:var(--muted)"></span></h3>
+        <div class="item-list" id="r-list"><div class="list-empty"><i class="fa-solid fa-spinner fa-spin"></i></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOOKINGS -->
+  <div class="asec" id="sec-bookings">
+    <div class="page-title">📥 Customer Bookings</div>
+    <div class="panel-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+        <h3 style="margin:0">All Booking Requests</h3>
+        <button class="btn-del" onclick="clearBookings()" style="font-size:12px">Clear All</button>
+      </div>
+      <div id="b-list"><div class="list-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</div></div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+var G50='#f0faf5';
+// ── TOAST ──────────────────────────────────────────────────
+function toast(msg,err){var t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(err?' err':'');setTimeout(function(){t.classList.remove('show')},3500)}
+
+// ── NAV ────────────────────────────────────────────────────
+document.querySelectorAll('.s-item[data-sec]').forEach(function(el){
+  el.addEventListener('click',function(){goSec(this.dataset.sec)})
+});
+function goSec(sec){
+  document.querySelectorAll('.s-item').forEach(function(s){s.classList.remove('on')});
+  var si=document.querySelector('.s-item[data-sec="'+sec+'"]');if(si)si.classList.add('on');
+  document.querySelectorAll('.asec').forEach(function(s){s.classList.remove('on')});
+  var el=document.getElementById('sec-'+sec);if(el)el.classList.add('on');
+  if(sec==='bookings')loadBookings();
+}
+
+// ── LOGIN ──────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',function(){
+  var badge=document.getElementById('fb-badge');
+  var stxt=document.getElementById('fb-status-txt');
+  if(FB_READY&&db){
+    badge.className='fb-badge fb-live';
+    badge.textContent='🔥 Firebase LIVE — '+firebaseConfig.projectId;
+    stxt.innerHTML='<span style="color:#20875a;font-weight:600">✓ Connected to Firebase: '+firebaseConfig.projectId+'</span><br>All data syncs to Firestore in real time.';
+  } else {
+    stxt.innerHTML='<span style="color:#c8922a">⚠ Firebase not configured.</span> Edit <strong>firebase-config.js</strong> to enable cloud sync.';
+  }
+});
+
+document.getElementById('lbtn').onclick=doLogin;
+document.getElementById('lp').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin()});
+function doLogin(){
+  var e=document.getElementById('le').value.trim();
+  var p=document.getElementById('lp').value;
+  if(typeof ADMIN_EMAIL!=='undefined'&&e===ADMIN_EMAIL&&p===ADMIN_PASS){
+    document.getElementById('login').classList.add('hide');
+    loadAll();
+  } else {document.getElementById('lerr').style.display='block';}
+}
+document.getElementById('lobtn').onclick=function(){location.reload()};
+
+// ── LOAD ALL ────────────────────────────────────────────────
+function loadAll(){
+  vfGetTours().then(function(d){renderTours(d);document.getElementById('st-t').textContent=d.length});
+  vfGetCars().then(function(d){renderCars(d);document.getElementById('st-c').textContent=d.length});
+  vfGetReviews().then(function(d){renderRevs(d);document.getElementById('st-r').textContent=d.length});
+  vfGetBookings().then(function(d){document.getElementById('st-b').textContent=d.length});
+}
+
+// ════════════════════════════════════════
+// TOURS
+// ════════════════════════════════════════
+document.getElementById('t-img').addEventListener('input',function(){
+  var url=this.value.trim();
+  var w=document.getElementById('t-img-prev');
+  if(url){document.getElementById('t-img-el').src=url;w.style.display='block';}else{w.style.display='none';}
+});
+document.getElementById('t-save-btn').onclick=saveTour;
+document.getElementById('t-reset-btn').onclick=resetTour;
+
+function saveTour(){
+  var title=document.getElementById('t-title').value.trim();
+  var dur=document.getElementById('t-dur').value.trim();
+  var price=document.getElementById('t-price').value;
+  if(!title||!price){toast('Title and Price required',true);return}
+  var eid=document.getElementById('et-id').value;
+  var obj={id:eid||vfUID(),title:title,category:document.getElementById('t-cat').value,
+    duration:dur,price:+price,originalPrice:+(document.getElementById('t-oprice').value||0),
+    image:document.getElementById('t-img').value.trim(),
+    description:document.getElementById('t-desc').value.trim(),
+    inclusions:document.getElementById('t-inc').value.split(',').map(function(s){return s.trim()}).filter(Boolean)};
+  var btn=document.getElementById('t-save-btn');btn.disabled=true;btn.textContent='Saving...';
+  vfSaveTour(obj,!eid).then(function(){
+    toast(eid?'Tour updated!':'Tour added!');resetTour();
+    vfGetTours().then(function(d){renderTours(d);document.getElementById('st-t').textContent=d.length});
+    btn.disabled=false;btn.textContent='Save Tour';
+  }).catch(function(e){toast('Error: '+e.message,true);btn.disabled=false;btn.textContent='Save Tour'});
+}
+function resetTour(){
+  document.getElementById('tour-form-title').textContent='Add Tour Package';
+  document.getElementById('et-id').value='';
+  ['t-title','t-dur','t-price','t-oprice','t-img','t-desc','t-inc'].forEach(function(id){document.getElementById(id).value=''});
+  document.getElementById('t-cat').selectedIndex=0;
+  document.getElementById('t-img-prev').style.display='none';
+}
+function renderTours(tours){
+  document.getElementById('t-count').textContent='('+tours.length+')';
+  document.getElementById('t-list').innerHTML=tours.length?tours.map(function(t){
+    return '<div class="item">'+
+      (t.image?'<img class="thumb" src="'+t.image+'" onerror="this.style.opacity=.1" alt="">':'')+
+      '<div class="item-info" style="flex:1"><h4>'+t.title+'</h4><p>₹'+Number(t.price).toLocaleString('en-IN')+' · '+t.category+' · '+(t.duration||'')+'</p></div>'+
+      '<div class="item-acts"><button class="btn-edit" onclick="editTour(\''+t.id+'\')">Edit</button>'+
+      '<button class="btn-del" onclick="delTour(\''+t.id+'\')">Del</button></div></div>';
+  }).join(''):'<div class="list-empty">No tours yet.</div>';
+}
+window.editTour=function(id){
+  vfGetTours().then(function(tours){
+    var t=tours.find(function(x){return x.id===id});if(!t)return;
+    document.getElementById('tour-form-title').textContent='Edit Tour';
+    document.getElementById('et-id').value=t.id;
+    document.getElementById('t-title').value=t.title;
+    document.getElementById('t-cat').value=t.category||'Adventure';
+    document.getElementById('t-dur').value=t.duration||'';
+    document.getElementById('t-price').value=t.price;
+    document.getElementById('t-oprice').value=t.originalPrice||'';
+    document.getElementById('t-img').value=t.image||'';
+    if(t.image){document.getElementById('t-img-el').src=t.image;document.getElementById('t-img-prev').style.display='block';}
+    document.getElementById('t-desc').value=t.description||'';
+    document.getElementById('t-inc').value=Array.isArray(t.inclusions)?t.inclusions.join(', '):(t.inclusions||'');
+    goSec('tours');window.scrollTo(0,0);
+  });
+};
+window.delTour=function(id){
+  if(!confirm('Delete this tour?'))return;
+  vfDeleteTour(id).then(function(){
+    toast('Tour deleted');
+    vfGetTours().then(function(d){renderTours(d);document.getElementById('st-t').textContent=d.length});
+  }).catch(function(e){toast('Error: '+e.message,true)});
+};
+
+// ════════════════════════════════════════
+// CARS
+// ════════════════════════════════════════
+document.getElementById('c-img').addEventListener('input',function(){
+  var url=this.value.trim();
+  var w=document.getElementById('c-img-prev');
+  if(url){document.getElementById('c-img-el').src=url;w.style.display='block';}else{w.style.display='none';}
+});
+document.getElementById('c-save-btn').onclick=saveCar;
+document.getElementById('c-reset-btn').onclick=resetCar;
+
+function saveCar(){
+  var name=document.getElementById('c-name').value.trim();
+  if(!name){toast('Car name required',true);return}
+  var eid=document.getElementById('ec-id').value;
+  var obj={id:eid||vfUID(),name:name,seats:document.getElementById('c-seats').value.trim(),
+    price:document.getElementById('c-price').value.trim(),image:document.getElementById('c-img').value.trim(),
+    description:document.getElementById('c-desc').value.trim(),
+    features:document.getElementById('c-feats').value.split(',').map(function(s){return s.trim()}).filter(Boolean)};
+  var btn=document.getElementById('c-save-btn');btn.disabled=true;btn.textContent='Saving...';
+  vfSaveCar(obj,!eid).then(function(){
+    toast(eid?'Car updated!':'Car added!');resetCar();
+    vfGetCars().then(function(d){renderCars(d);document.getElementById('st-c').textContent=d.length});
+    btn.disabled=false;btn.textContent='Save Car';
+  }).catch(function(e){toast('Error: '+e.message,true);btn.disabled=false;btn.textContent='Save Car'});
+}
+function resetCar(){
+  document.getElementById('car-form-title').textContent='Add Car';
+  document.getElementById('ec-id').value='';
+  ['c-name','c-seats','c-price','c-img','c-desc','c-feats'].forEach(function(id){document.getElementById(id).value=''});
+  document.getElementById('c-img-prev').style.display='none';
+}
+function renderCars(cars){
+  document.getElementById('c-count').textContent='('+cars.length+')';
+  document.getElementById('c-list').innerHTML=cars.length?cars.map(function(c){
+    return '<div class="item">'+
+      (c.image?'<img class="thumb" src="'+c.image+'" onerror="this.style.opacity=.1" alt="">':'')+
+      '<div class="item-info" style="flex:1"><h4>'+c.name+'</h4><p>'+(c.seats||'')+(c.price?' · '+c.price:'')+'</p></div>'+
+      '<div class="item-acts"><button class="btn-edit" onclick="editCar(\''+c.id+'\')">Edit</button>'+
+      '<button class="btn-del" onclick="delCar(\''+c.id+'\')">Del</button></div></div>';
+  }).join(''):'<div class="list-empty">No cars yet.</div>';
+}
+window.editCar=function(id){
+  vfGetCars().then(function(cars){
+    var c=cars.find(function(x){return x.id===id});if(!c)return;
+    document.getElementById('car-form-title').textContent='Edit Car';
+    document.getElementById('ec-id').value=c.id;
+    document.getElementById('c-name').value=c.name;
+    document.getElementById('c-seats').value=c.seats||'';
+    document.getElementById('c-price').value=c.price||'';
+    document.getElementById('c-img').value=c.image||'';
+    if(c.image){document.getElementById('c-img-el').src=c.image;document.getElementById('c-img-prev').style.display='block';}
+    document.getElementById('c-desc').value=c.description||'';
+    document.getElementById('c-feats').value=Array.isArray(c.features)?c.features.join(', '):(c.features||'');
+    goSec('cars');window.scrollTo(0,0);
+  });
+};
+window.delCar=function(id){
+  if(!confirm('Delete this car?'))return;
+  vfDeleteCar(id).then(function(){
+    toast('Car deleted');
+    vfGetCars().then(function(d){renderCars(d);document.getElementById('st-c').textContent=d.length});
+  });
+};
+
+// ════════════════════════════════════════
+// REVIEWS
+// ════════════════════════════════════════
+document.getElementById('r-save-btn').onclick=saveRev;
+document.getElementById('r-reset-btn').onclick=resetRev;
+
+function saveRev(){
+  var name=document.getElementById('r-name').value.trim();
+  var text=document.getElementById('r-text').value.trim();
+  if(!name||!text){toast('Name and Review required',true);return}
+  var eid=document.getElementById('er-id').value;
+  var obj={id:eid||vfUID(),name:name,location:document.getElementById('r-loc').value.trim(),
+    rating:+document.getElementById('r-rat').value,text:text};
+  var btn=document.getElementById('r-save-btn');btn.disabled=true;btn.textContent='Saving...';
+  vfSaveReview(obj,!eid).then(function(){
+    toast(eid?'Updated!':'Review added!');resetRev();
+    vfGetReviews().then(function(d){renderRevs(d);document.getElementById('st-r').textContent=d.length});
+    btn.disabled=false;btn.textContent='Save Review';
+  }).catch(function(e){toast('Error: '+e.message,true);btn.disabled=false;btn.textContent='Save Review'});
+}
+function resetRev(){
+  document.getElementById('rev-form-title').textContent='Add Review';
+  document.getElementById('er-id').value='';
+  ['r-name','r-loc','r-text'].forEach(function(id){document.getElementById(id).value=''});
+  document.getElementById('r-rat').selectedIndex=0;
+}
+function renderRevs(revs){
+  document.getElementById('r-count').textContent='('+revs.length+')';
+  document.getElementById('r-list').innerHTML=revs.length?revs.map(function(r){
+    return '<div class="item"><div class="item-info" style="flex:1">'+
+      '<h4>'+r.name+' <span style="color:#c8922a;font-size:11px">'+'★'.repeat(r.rating||5)+'</span></h4>'+
+      '<p>'+(r.text||'').substring(0,65)+'...</p></div>'+
+      '<div class="item-acts"><button class="btn-edit" onclick="editRev(\''+r.id+'\')">Edit</button>'+
+      '<button class="btn-del" onclick="delRev(\''+r.id+'\')">Del</button></div></div>';
+  }).join(''):'<div class="list-empty">No reviews yet.</div>';
+}
+window.editRev=function(id){
+  vfGetReviews().then(function(revs){
+    var r=revs.find(function(x){return x.id===id});if(!r)return;
+    document.getElementById('rev-form-title').textContent='Edit Review';
+    document.getElementById('er-id').value=r.id;
+    document.getElementById('r-name').value=r.name;
+    document.getElementById('r-loc').value=r.location||'';
+    document.getElementById('r-rat').value=r.rating||5;
+    document.getElementById('r-text').value=r.text;
+    goSec('reviews');window.scrollTo(0,0);
+  });
+};
+window.delRev=function(id){
+  if(!confirm('Delete this review?'))return;
+  vfDeleteReview(id).then(function(){
+    toast('Deleted');
+    vfGetReviews().then(function(d){renderRevs(d);document.getElementById('st-r').textContent=d.length});
+  });
+};
+
+// ════════════════════════════════════════
+// BOOKINGS
+// ════════════════════════════════════════
+function loadBookings(){
+  document.getElementById('b-list').innerHTML='<div class="list-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</div>';
+  vfGetBookings().then(function(bks){
+    document.getElementById('st-b').textContent=bks.length;
+    if(!bks.length){document.getElementById('b-list').innerHTML='<div class="list-empty">No bookings received yet.</div>';return}
+    document.getElementById('b-list').innerHTML=bks.map(function(b){
+      return '<div class="booking-item">'+
+        '<h4><i class="fa-solid fa-user" style="color:var(--g500)"></i>'+b.name+
+        (b.service?'<span class="badge-service">'+b.service+'</span>':'')+
+        (b.date_submitted?'<span style="font-size:11px;color:var(--muted);font-weight:400">'+b.date_submitted+'</span>':'')+
+        '</h4>'+
+        '<p><i class="fa-solid fa-phone" style="color:var(--g400);width:14px"></i> <a href="tel:+91'+b.phone+'" style="color:inherit">'+b.phone+'</a>'+
+        (b.email?' &nbsp;&nbsp;<i class="fa-solid fa-envelope" style="color:var(--g400);width:14px"></i> '+b.email:'')+
+        (b.date?' &nbsp;&nbsp;<i class="fa-solid fa-calendar" style="color:var(--g400);width:14px"></i> '+b.date:'')+
+        (b.persons?' &nbsp;<i class="fa-solid fa-users" style="color:var(--g400);width:14px"></i> '+b.persons+' pax':'')+
+        '</p>'+
+        '<div class="booking-msg">'+b.message+'</div>'+
+        '<div style="margin-top:10px;display:flex;gap:8px">'+
+        '<a href="tel:+91'+b.phone+'" class="btn-edit" style="font-size:11.5px;border-radius:8px;border:1px solid var(--g400);background:rgba(32,135,90,.06);color:var(--g600);padding:5px 12px;text-decoration:none;cursor:pointer;"><i class="fa-solid fa-phone"></i> Call</a>'+
+        '<a href="https://wa.me/91'+b.phone+'?text=Hi%20'+encodeURIComponent(b.name)+'%2C%20Thank%20you%20for%20contacting%20Vellfire%20Holidays!" target="_blank" class="btn-edit" style="font-size:11.5px;border-radius:8px;border:1px solid #25D366;background:rgba(37,211,102,.06);color:#1ebe5c;padding:5px 12px;text-decoration:none;cursor:pointer;"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>'+
+        '<button class="btn-del" onclick="delBooking(\''+b.id+'\')" style="font-size:11.5px">Delete</button></div>'+
+        '</div>';
+    }).join('');
+  });
+}
+window.delBooking=function(id){
+  if(!confirm('Delete this booking?'))return;
+  vfDeleteBooking(id).then(function(){toast('Deleted');loadBookings();});
+};
+window.clearBookings=function(){
+  if(!confirm('Clear ALL bookings?'))return;
+  vfGetBookings().then(function(bks){
+    var proms=bks.map(function(b){return vfDeleteBooking(b.id)});
+    Promise.all(proms).then(function(){toast('All cleared');loadBookings();document.getElementById('st-b').textContent='0'});
+  });
+};
+</script>
+</body>
+</html>

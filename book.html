@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="Book Kashmir tours and car rentals with Vellfire Holidays, Srinagar. Fill the form or WhatsApp Shaiq Sajad directly at 7889850927.">
+<meta name="keywords" content="book Kashmir tour, book car rental Srinagar, Vellfire Holidays booking, Kashmir holiday booking">
+<title>Book Your Kashmir Trip – Vellfire Holidays | Srinagar J&K</title>
+<link rel="canonical" href="https://vellfireholidays.com/book.html">
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="firebase-config.js"></script>
+<script src="db.js"></script>
+<style>
+.book-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:52px;align-items:start}
+.book-form-card{background:var(--white);border:1px solid var(--line);border-radius:28px;padding:clamp(28px,4vw,48px);box-shadow:var(--shadow2)}
+.book-form-card h2{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--text);margin-bottom:6px}
+.book-form-card>p{color:var(--muted);font-size:14.5px;margin-bottom:28px}
+.book-sidebar{display:flex;flex-direction:column;gap:22px}
+.info-card{background:linear-gradient(135deg,var(--g700),var(--g600));border-radius:22px;padding:30px;color:var(--white)}
+.info-card h3{font-family:'Playfair Display',serif;font-size:20px;margin-bottom:18px}
+.info-item{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;font-size:14px;color:rgba(255,255,255,.8)}
+.info-item i{color:var(--g200);margin-top:2px;flex-shrink:0;width:16px}
+.info-item a{color:rgba(255,255,255,.8);transition:var(--tr)}
+.info-item a:hover{color:var(--white)}
+.wa-book-btn{display:flex;align-items:center;justify-content:center;gap:12px;background:#25D366;color:var(--white);padding:16px 28px;border-radius:14px;font-size:15px;font-weight:600;transition:var(--tr);box-shadow:0 6px 20px rgba(37,211,102,.35)}
+.wa-book-btn:hover{background:#1ebe5c;transform:translateY(-2px);box-shadow:0 10px 28px rgba(37,211,102,.45)}
+.guarantee-card{background:var(--g50);border:1px solid var(--g200);border-radius:20px;padding:24px}
+.guarantee-card h4{font-family:'Playfair Display',serif;font-size:17px;color:var(--g700);margin-bottom:14px}
+.guarantee-item{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--text2);margin-bottom:10px}
+.guarantee-item i{color:var(--g500)}
+.form-success{display:none;background:linear-gradient(135deg,var(--g50),#e8f8f0);border:1px solid var(--g200);border-radius:14px;padding:24px;text-align:center;margin-top:18px}
+.form-success i{font-size:36px;color:var(--g500);display:block;margin-bottom:12px}
+.form-success h4{font-family:'Playfair Display',serif;font-size:20px;color:var(--g700);margin-bottom:6px}
+.form-success p{color:var(--muted);font-size:14px}
+@media(max-width:900px){.book-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="loader">
+  <div class="ld-brand">Vellfire <span>Holidays</span></div>
+  <div class="ld-bar"><div class="ld-fill"></div></div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="nav" class="scrolled">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">🏔️</div>Vellfire <span>Holidays</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="tours.html">Tours</a></li>
+    <li><a href="cars.html">Car Rentals</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="book.html" class="nav-cta">Book Now</a></li>
+  </ul>
+  <div class="hamburger" id="ham"><span></span><span></span><span></span></div>
+</nav>
+<div class="mob-nav" id="mobnav">
+  <a href="index.html">Home</a>
+  <a href="tours.html">Tours</a>
+  <a href="cars.html">Car Rentals</a>
+  <a href="about.html" class="active">About</a>
+  <a href="contact.html">Contact</a>
+  <a href="book.html" class="mob-cta">Book Now</a>
+</div>
+
+
+<div class="page-hero">
+  <div class="page-hero-content">
+    <div class="page-hero-tag">📅 Easy Booking</div>
+    <h1 class="page-hero-title">Book Your <em>Kashmir Trip</em></h1>
+    <p class="page-hero-sub">Fill the form below or WhatsApp us for instant confirmation</p>
+  </div>
+</div>
+
+<section>
+  <div class="book-grid">
+    <!-- FORM -->
+    <div class="book-form-card rv">
+      <h2>Send Us Your <em style="font-style:italic;color:var(--g600)">Enquiry</em></h2>
+      <p>We'll get back to you within a few hours with a confirmed quote.</p>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Name *</label>
+          <input type="text" id="b-name" placeholder="Full name">
+        </div>
+        <div class="form-group">
+          <label>Phone Number *</label>
+          <input type="tel" id="b-phone" placeholder="+91 XXXXX XXXXX">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="b-email" placeholder="you@example.com">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Service Required *</label>
+          <select id="b-service">
+            <option value="">Select Service</option>
+            <option>Kashmir Tour Package</option>
+            <option>Car Rental</option>
+            <option>Hotel Booking</option>
+            <option>Custom Package</option>
+            <option>Gulmarg Tour</option>
+            <option>Pahalgam Tour</option>
+            <option>Sonamarg Tour</option>
+            <option>Full Kashmir Package</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Travel Date</label>
+          <input type="date" id="b-date">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>No. of Persons</label>
+          <input type="number" id="b-persons" placeholder="e.g. 4" min="1">
+        </div>
+        <div class="form-group">
+          <label>No. of Nights</label>
+          <input type="number" id="b-nights" placeholder="e.g. 5" min="0">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Special Requirements / Message *</label>
+        <textarea id="b-msg" placeholder="Tell us about your trip plans, preferences, any special requirements..."></textarea>
+      </div>
+      <button class="btn" style="width:100%;justify-content:center" id="b-submit">
+        <i class="fa-solid fa-paper-plane"></i><span id="b-submit-txt">Send Booking Request</span>
+      </button>
+      <div class="form-success" id="b-success">
+        <i class="fa-solid fa-circle-check"></i>
+        <h4>Booking Request Sent!</h4>
+        <p>Thank you! Shaiq Sajad will contact you within a few hours to confirm your booking.</p>
+        <a href="https://wa.me/917889850927" target="_blank" style="display:inline-flex;align-items:center;gap:8px;margin-top:12px;color:var(--g600);font-weight:600"><i class="fa-brands fa-whatsapp"></i>Also message on WhatsApp for faster response</a>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="book-sidebar rvr">
+      <div class="info-card">
+        <h3>📞 Quick Contact</h3>
+        <div class="info-item"><i class="fa-solid fa-phone"></i><div><strong>Call Us</strong><br><a href="tel:+917889850927">+91 7889850927</a></div></div>
+        <div class="info-item"><i class="fa-solid fa-envelope"></i><div><strong>Email</strong><br><a href="mailto:vellfireholidays@gmail.com">vellfireholidays@gmail.com</a></div></div>
+        <div class="info-item"><i class="fa-solid fa-location-dot"></i><div><strong>Office</strong><br>Nawakadel, Srinagar, J&K</div></div>
+        <div class="info-item"><i class="fa-solid fa-clock"></i><div><strong>Hours</strong><br>Mon–Sat: 9AM–7PM<br>Sunday: 10AM–4PM</div></div>
+      </div>
+
+      <a href="https://wa.me/917889850927?text=Hi%20Vellfire%20Holidays%2C%20I%27d%20like%20to%20book%20a%20Kashmir%20tour." target="_blank" class="wa-book-btn rv">
+        <i class="fa-brands fa-whatsapp" style="font-size:22px"></i>
+        <div><div style="font-size:16px;font-weight:700">Book via WhatsApp</div><div style="font-size:12px;opacity:.85">Fastest response — usually within minutes</div></div>
+      </a>
+
+      <div class="guarantee-card rv">
+        <h4>✅ Our Booking Promise</h4>
+        <div class="guarantee-item"><i class="fa-solid fa-check-circle"></i>No advance payment required to enquire</div>
+        <div class="guarantee-item"><i class="fa-solid fa-check-circle"></i>Response within 2–4 hours</div>
+        <div class="guarantee-item"><i class="fa-solid fa-check-circle"></i>Free itinerary planning</div>
+        <div class="guarantee-item"><i class="fa-solid fa-check-circle"></i>Best price guarantee</div>
+        <div class="guarantee-item"><i class="fa-solid fa-check-circle"></i>100% flexible — modify anytime</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div><div class="footer-brand">Vellfire <span>Holidays</span></div><p class="footer-about">Book your dream Kashmir trip with Vellfire Holidays — tours, car rentals & hotel bookings.</p><div class="footer-social"><a href="https://wa.me/917889850927"><i class="fa-brands fa-whatsapp"></i></a><a href="https://www.instagram.com/vellfire_holidays?utm_source=qr&igsh=MTRkdTdydWd6dnczdw=="><i class="fa-brands fa-instagram"></i></a><a href="https://www.facebook.com/share/1AvcsRSPPp/"><i class="fa-brands fa-facebook-f"></i></a></div></div>
+    <div class="footer-col"><h4>Pages</h4><ul class="footer-links"><li><a href="index.html">Home</a></li><li><a href="tours.html">Tours</a></li><li><a href="cars.html">Car Rentals</a></li><li><a href="book.html">Book Now</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-col"><h4>Services</h4><ul class="footer-links"><li><a href="tours.html">Kashmir Tours</a></li><li><a href="cars.html">Car Rentals</a></li><li><a href="book.html">Hotel Bookings</a></li><li><a href="book.html">Custom Packages</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4><div class="footer-contact-item"><i class="fa-solid fa-phone"></i><a href="tel:+917889850927">+91 7889850927</a></div><div class="footer-contact-item"><i class="fa-solid fa-envelope"></i><a href="mailto:vellfireholidays@gmail.com">vellfireholidays@gmail.com</a></div></div>
+  </div>
+  <div class="footer-bottom"><p>© 2024 Vellfire Holidays | Shaiq Sajad, Srinagar J&K</p></div>
+</footer>
+
+<a href="https://wa.me/917889850927" target="_blank" class="wa-float"><i class="fa-brands fa-whatsapp"></i></a>
+<div class="toast" id="toast"></div>
+
+<script>
+function toast(msg,err){var t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(err?' err':'');setTimeout(function(){t.classList.remove('show')},3500)}
+
+document.getElementById('b-submit').addEventListener('click',function(){
+  var name=document.getElementById('b-name').value.trim();
+  var phone=document.getElementById('b-phone').value.trim();
+  var service=document.getElementById('b-service').value;
+  var msg=document.getElementById('b-msg').value.trim();
+  if(!name||!phone||!msg){toast('Please fill Name, Phone and Message',true);return}
+  var btn=this; btn.disabled=true;
+  document.getElementById('b-submit-txt').textContent='Sending...';
+  vfSaveBooking({
+    name:name, phone:phone,
+    email:document.getElementById('b-email').value.trim(),
+    service:service,
+    date:document.getElementById('b-date').value,
+    persons:document.getElementById('b-persons').value,
+    nights:document.getElementById('b-nights').value,
+    message:msg
+  }).then(function(){
+    document.getElementById('b-success').style.display='block';
+    ['b-name','b-phone','b-email','b-msg','b-date','b-persons','b-nights'].forEach(function(id){document.getElementById(id).value=''});
+    document.getElementById('b-service').selectedIndex=0;
+    document.getElementById('b-submit-txt').textContent='Send Booking Request';
+    btn.disabled=false;
+    toast('Booking request sent! We\'ll contact you soon ✓');
+    document.getElementById('b-success').scrollIntoView({behavior:'smooth'});
+  }).catch(function(){
+    document.getElementById('b-submit-txt').textContent='Send Booking Request';
+    btn.disabled=false;
+    toast('Failed — please call us directly.',true);
+  });
+});
+
+document.getElementById('ham').addEventListener('click',function(){this.classList.toggle('open');document.getElementById('mobnav').classList.toggle('open')});
+document.getElementById('mobnav').addEventListener('click',function(e){if(e.target.tagName==='A'){document.getElementById('ham').classList.remove('open');this.classList.remove('open')}});
+function initReveal(){var obs=new IntersectionObserver(function(entries){entries.forEach(function(el){if(el.isIntersecting){el.target.classList.add('on');obs.unobserve(el.target)}})},{threshold:.1,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.rv,.rvl,.rvr').forEach(function(el){if(!el.classList.contains('on'))obs.observe(el)})}
+window.addEventListener('load',function(){setTimeout(function(){document.getElementById('loader').classList.add('gone');initReveal();},1800)});
+setTimeout(initReveal,500);
+</script>
+</body>
+</html>
