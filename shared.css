@@ -48,11 +48,7 @@ nav.scrolled .nav-logo{color:var(--g700)}
 .nav-logo span{color:var(--g300)}
 nav.scrolled .nav-logo span{color:var(--g500)}
 .nav-logo-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--g500),var(--g700));display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--white);flex-shrink:0;box-shadow:0 3px 12px rgba(32,135,90,.4)}
-.nav-logo-icon img{
-  width:20px;
-  height:20px;
-  object-fit:contain;
-}
+
 .nav-links{display:flex;align-items:center;gap:4px}
 .nav-links a{display:block;padding:8px 14px;border-radius:8px;font-size:14px;font-weight:500;color:rgba(255,255,255,.82);transition:var(--tr);white-space:nowrap}
 nav.scrolled .nav-links a{color:var(--text2)}
