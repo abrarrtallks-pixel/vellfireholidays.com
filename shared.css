@@ -50,7 +50,7 @@ nav.scrolled{background:rgba(255,255,255,.97);backdrop-filter:blur(20px);-webkit
   font-family:'Playfair Display',serif;
   font-size:clamp(18px,2.5vw,24px);
   font-weight:700;
-  color:var(--white);
+  color:black;
   transition:var(--tr);
   flex-shrink:0;
 }
