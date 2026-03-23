@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="Gallery – Vellfire Holidays Kashmir. Stunning photos of Gulmarg, Pahalgam, Sonamarg, Dal Lake and the beautiful valleys of Jammu & Kashmir.">
+<meta name="keywords" content="Kashmir gallery, Kashmir photos, Gulmarg images, Pahalgam pictures, Sonamarg photos, Dal Lake Kashmir, Vellfire Holidays gallery">
+<meta name="author" content="Shaiq Sajad – Vellfire Holidays">
+<meta property="og:title" content="Kashmir Photo Gallery – Vellfire Holidays">
+<meta property="og:description" content="Explore stunning Kashmir through our photo gallery. Gulmarg, Pahalgam, Sonamarg, Dal Lake and more.">
+<meta property="og:url" content="https://vellfireholidays.com/gallery.html">
+<meta name="robots" content="index,follow">
+<title>Kashmir Photo Gallery – Vellfire Holidays | Srinagar J&K</title>
+<link rel="canonical" href="https://vellfireholidays.com/gallery.html">
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+
+/* ── Masonry Grid ── */
+.gallery-grid {
+  columns: 3 280px;
+  column-gap: 18px;
+}
+.gallery-item {
+  break-inside: avoid;
+  margin-bottom: 18px;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  background: var(--g100);
+  display: block;
+}
+.gallery-item img {
+  width: 100%;
+  display: block;
+  transition: transform 0.55s cubic-bezier(0.25,1,0.5,1);
+}
+.gallery-item:hover img {
+  transform: scale(1.06);
+}
+.gallery-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10,36,24,0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.35s ease;
+}
+.gallery-overlay i {
+  font-size: 28px;
+  color: var(--white);
+  opacity: 0;
+  transform: scale(0.7);
+  transition: all 0.35s ease;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,.4));
+}
+.gallery-item:hover .gallery-overlay {
+  background: rgba(10,36,24,0.42);
+}
+.gallery-item:hover .gallery-overlay i {
+  opacity: 1;
+  transform: scale(1);
+}
+.gallery-caption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 32px 16px 14px;
+  background: linear-gradient(to top, rgba(10,36,24,.75), transparent);
+  color: var(--white);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: all 0.35s ease;
+}
+.gallery-item:hover .gallery-caption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Lightbox ── */
+#lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(6,18,12,0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.35s ease;
+  padding: 20px;
+}
+#lightbox.open {
+  opacity: 1;
+  visibility: visible;
+}
+.lb-inner {
+  position: relative;
+  max-width: 92vw;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#lb-img {
+  max-width: 88vw;
+  max-height: 84vh;
+  border-radius: 14px;
+  box-shadow: 0 32px 80px rgba(0,0,0,.6);
+  object-fit: contain;
+  transition: opacity 0.2s ease;
+  display: block;
+}
+#lb-img.fade { opacity: 0; }
+
+.lb-close {
+  position: fixed;
+  top: 20px; right: 20px;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.18);
+  color: var(--white);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.25s ease;
+  z-index: 9001;
+}
+.lb-close:hover { background: #c0392b; border-color: #c0392b; }
+
+.lb-nav {
+  position: fixed;
+  top: 50%; transform: translateY(-50%);
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.09);
+  border: 1px solid rgba(255,255,255,.16);
+  color: var(--white);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.25s ease;
+  z-index: 9001;
+}
+.lb-nav:hover { background: var(--g600); border-color: var(--g500); }
+.lb-prev { left: 16px; }
+.lb-next { right: 16px; }
+
+.lb-counter {
+  position: fixed;
+  bottom: 22px; left: 50%; transform: translateX(-50%);
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.15);
+  color: rgba(255,255,255,.75);
+  font-size: 13px; font-weight: 500;
+  padding: 6px 18px; border-radius: 50px;
+  letter-spacing: 0.5px;
+  z-index: 9001;
+}
+.lb-caption-text {
+  position: fixed;
+  bottom: 60px; left: 50%; transform: translateX(-50%);
+  color: rgba(255,255,255,.65);
+  font-size: 13.5px; font-weight: 400;
+  letter-spacing: 0.3px;
+  text-align: center;
+  max-width: 500px;
+  z-index: 9001;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── CTA strip ── */
+.gallery-cta {
+  background: linear-gradient(135deg, var(--g700), var(--g600));
+  border-radius: 24px;
+  padding: clamp(36px,5vw,60px) clamp(24px,5vw,60px);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px; flex-wrap: wrap;
+  margin-top: 0;
+}
+.gallery-cta h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(20px,3vw,34px);
+  font-weight: 700; color: var(--white); margin-bottom: 6px;
+}
+.gallery-cta p { color: rgba(255,255,255,.62); font-size: 15px; }
+.gallery-cta-btns { display: flex; gap: 12px; flex-wrap: wrap; flex-shrink: 0; }
+
+/* ── Responsive ── */
+@media(max-width:768px) {
+  .gallery-grid { columns: 2 160px; column-gap: 12px; }
+  .gallery-item { margin-bottom: 12px; border-radius: 12px; }
+  .lb-nav { width: 40px; height: 40px; font-size: 14px; }
+  .lb-prev { left: 8px; }
+  .lb-next { right: 8px; }
+  #lb-img { max-width: 94vw; max-height: 80vh; border-radius: 10px; }
+  .gallery-cta { text-align: center; justify-content: center; }
+}
+@media(max-width:420px) {
+  .gallery-grid { columns: 1; }
+  .gallery-item { margin-bottom: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="ld-brand">Vellfire <span>Holidays</span></div>
+  <div class="ld-bar"><div class="ld-fill"></div></div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="nav" class="scrolled">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">🏔️</div>Vellfire <span>Holidays</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="tours.html">Tours</a></li>
+    <li><a href="cars.html">Car Rentals</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="gallery.html" class="active">Gallery</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="book.html" class="nav-cta">Book Now</a></li>
+  </ul>
+  <div class="hamburger" id="ham"><span></span><span></span><span></span></div>
+</nav>
+<div class="mob-nav" id="mobnav">
+  <a href="index.html">Home</a>
+  <a href="tours.html">Tours</a>
+  <a href="cars.html">Car Rentals</a>
+  <a href="about.html">About</a>
+  <a href="gallery.html" class="active">Gallery</a>
+  <a href="contact.html">Contact</a>
+  <a href="book.html" class="mob-cta">Book Now</a>
+</div>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="page-hero-content">
+    <div class="page-hero-tag">📸 Kashmir Through Our Lens</div>
+    <h1 class="page-hero-title">Kashmir <em>Gallery</em></h1>
+    <p class="page-hero-sub">Breathtaking snapshots from across the Valley — Gulmarg, Pahalgam, Sonamarg, Dal Lake and beyond</p>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<section>
+  <div class="section-head center rv">
+    <div class="eyebrow">Visual Stories</div>
+    <h2 class="section-title">The Beauty of <em>Kashmir</em></h2>
+    <div class="divider"></div>
+    <p class="section-sub">Every frame tells a story. Click any photo to explore it in full.</p>
+  </div>
+
+  <div class="gallery-grid" id="gallery-grid">
+
+    <div class="gallery-item rv" onclick="openLB(0)">
+      <img src="https://images.unsplash.com/photo-1614591276564-7b3e69347a48?q=80&w=1174&auto=format&fit=crop"
+           alt="Kashmir Valley landscape – Vellfire Holidays" loading="lazy">
+      <div class="gallery-overlay"><i class="fa-solid fa-expand"></i></div>
+      <div class="gallery-caption">Kashmir Valley</div>
+    </div>
+
+    <div class="gallery-item rv rv-d1" onclick="openLB(1)">
+      <img src="https://images.unsplash.com/photo-1564329494258-3f72215ba175?q=80&w=1170&auto=format&fit=crop"
+           alt="Scenic Kashmir mountains – Vellfire Holidays" loading="lazy">
+      <div class="gallery-overlay"><i class="fa-solid fa-expand"></i></div>
+      <div class="gallery-caption">Mountain Scenery</div>
+    </div>
+
+    <div class="gallery-item rv rv-d2" onclick="openLB(2)">
+      <img src="https://plus.unsplash.com/premium_photo-1674044615725-c96113850354?q=80&w=687&auto=format&fit=crop"
+           alt="Premium Kashmir view – Vellfire Holidays" loading="lazy">
+      <div class="gallery-overlay"><i class="fa-solid fa-expand"></i></div>
+      <div class="gallery-caption">Valley Views</div>
+    </div>
+
+    <div class="gallery-item rv rv-d1" onclick="openLB(3)">
+      <img src="https://images.unsplash.com/photo-1651509094074-e8acaeb84d8f?q=80&w=1170&auto=format&fit=crop"
+           alt="Kashmir landscape photography – Vellfire Holidays" loading="lazy">
+      <div class="gallery-overlay"><i class="fa-solid fa-expand"></i></div>
+      <div class="gallery-caption">Landscape Horizon</div>
+    </div>
+
+    <div class="gallery-item rv rv-d2" onclick="openLB(4)">
+      <img src="https://images.unsplash.com/photo-1696679492831-a7686ea301b3?q=80&w=735&auto=format&fit=crop"
+           alt="Natural beauty Kashmir – Vellfire Holidays" loading="lazy">
+      <div class="gallery-overlay"><i class="fa-solid fa-expand"></i></div>
+      <div class="gallery-caption">Natural Beauty</div>
+    </div>
+
+    <div class="gallery-item rv rv-d3" onclick="openLB(5)">
+      <img src="https://images.unsplash.com/photo-1671958646921-50781a13a7ac?q=80&w=1075&auto=format&fit=crop"
+           alt="Kashmir winter scenery – Vellfire Holidays" loading="lazy">
+      <div class="gallery-overlay"><i class="fa-solid fa-expand"></i></div>
+      <div class="gallery-caption">Winter Serenity</div>
+    </div>
+
+    <div class="gallery-item rv rv-d1" onclick="openLB(6)">
+      <img src="https://images.unsplash.com/photo-1708500450505-4d5bd3282c54?q=80&w=716&auto=format&fit=crop"
+           alt="Kashmir travel destination – Vellfire Holidays" loading="lazy">
+      <div class="gallery-overlay"><i class="fa-solid fa-expand"></i></div>
+      <div class="gallery-caption">Travel Destination</div>
+    </div>
+
+    <div class="gallery-item rv rv-d2" onclick="openLB(7)">
+      <img src="https://images.unsplash.com/photo-1696679492271-184101a8d776?q=80&w=1074&auto=format&fit=crop"
+           alt="Kashmir nature photography – Vellfire Holidays" loading="lazy">
+      <div class="gallery-overlay"><i class="fa-solid fa-expand"></i></div>
+      <div class="gallery-caption">Nature's Canvas</div>
+    </div>
+
+    <div class="gallery-item rv rv-d3" onclick="openLB(8)">
+      <img src="https://images.unsplash.com/photo-1668173443752-bdec2fbb3c79?q=80&w=1074&auto=format&fit=crop"
+           alt="Kashmir scenic route – Vellfire Holidays" loading="lazy">
+      <div class="gallery-overlay"><i class="fa-solid fa-expand"></i></div>
+      <div class="gallery-caption">Scenic Routes</div>
+    </div>
+
+    <div class="gallery-item rv rv-d2" onclick="openLB(9)">
+      <img src="https://images.unsplash.com/photo-1609412489711-2f037d8f4c77?q=80&w=627&auto=format&fit=crop"
+           alt="Kashmir beauty captured – Vellfire Holidays" loading="lazy">
+      <div class="gallery-overlay"><i class="fa-solid fa-expand"></i></div>
+      <div class="gallery-caption">Timeless Kashmir</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section-bg">
+  <div class="gallery-cta rv">
+    <div>
+      <h2>Experience Kashmir <em style="font-style:italic;color:var(--g300)">In Person</em></h2>
+      <p>Photos don't do it justice. Let us take you there.</p>
+    </div>
+    <div class="gallery-cta-btns">
+      <a href="book.html" class="btn"><i class="fa-solid fa-calendar-check"></i><span>Book Now</span></a>
+      <a href="tours.html" class="btn-outline"><i class="fa-solid fa-compass"></i><span>View Tours</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">Vellfire <span>Holidays</span></div>
+      <p class="footer-about">Premier tour &amp; travel agency in Nawakadel, Srinagar. Tours, Car Rentals &amp; Hotel Bookings by Shaiq Sajad.</p>
+      <div class="footer-social">
+        <a href="https://wa.me/917889850927" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="#" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="mailto:vellfireholidays@gmail.com" title="Email"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Pages</h4>
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="tours.html">Tours</a></li>
+        <li><a href="cars.html">Car Rentals</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="book.html">Book Now</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Tours</h4>
+      <ul class="footer-links">
+        <li><a href="tours.html">Gulmarg Tour</a></li>
+        <li><a href="tours.html">Pahalgam Tour</a></li>
+        <li><a href="tours.html">Sonamarg Tour</a></li>
+        <li><a href="tours.html">Full Package</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <div class="footer-contact-item"><i class="fa-solid fa-phone"></i><a href="tel:+917889850927">+91 7889850927</a></div>
+      <div class="footer-contact-item"><i class="fa-solid fa-envelope"></i><a href="mailto:vellfireholidays@gmail.com">vellfireholidays@gmail.com</a></div>
+      <div class="footer-contact-item"><i class="fa-solid fa-location-dot"></i><span>Nawakadel, Srinagar J&amp;K</span></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 Vellfire Holidays | Shaiq Sajad, Srinagar J&amp;K</p>
+    <p><a href="https://vellfireholidays.com">vellfireholidays.com</a></p>
+  </div>
+</footer>
+
+<!-- WhatsApp Float -->
+<a href="https://wa.me/917889850927" target="_blank" class="wa-float" title="WhatsApp Vellfire Holidays">
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+<button class="scroll-top" id="scrtop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <i class="fa-solid fa-chevron-up"></i>
+</button>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <button class="lb-close" id="lb-close"><i class="fa-solid fa-xmark"></i></button>
+  <button class="lb-nav lb-prev" id="lb-prev"><i class="fa-solid fa-chevron-left"></i></button>
+  <div class="lb-inner">
+    <img id="lb-img" src="" alt="Kashmir photo – Vellfire Holidays">
+  </div>
+  <button class="lb-nav lb-next" id="lb-next"><i class="fa-solid fa-chevron-right"></i></button>
+  <div class="lb-caption-text" id="lb-caption"></div>
+  <div class="lb-counter" id="lb-counter">1 / 10</div>
+</div>
+
+<script>
+/* ── Gallery Data ── */
+var photos = [
+  { src: 'https://images.unsplash.com/photo-1614591276564-7b3e69347a48?q=80&w=1174&auto=format&fit=crop', caption: 'Kashmir Valley' },
+  { src: 'https://images.unsplash.com/photo-1564329494258-3f72215ba175?q=80&w=1170&auto=format&fit=crop', caption: 'Mountain Scenery' },
+  { src: 'https://plus.unsplash.com/premium_photo-1674044615725-c96113850354?q=80&w=687&auto=format&fit=crop',  caption: 'Valley Views' },
+  { src: 'https://images.unsplash.com/photo-1651509094074-e8acaeb84d8f?q=80&w=1170&auto=format&fit=crop', caption: 'Landscape Horizon' },
+  { src: 'https://images.unsplash.com/photo-1696679492831-a7686ea301b3?q=80&w=735&auto=format&fit=crop',  caption: 'Natural Beauty' },
+  { src: 'https://images.unsplash.com/photo-1671958646921-50781a13a7ac?q=80&w=1075&auto=format&fit=crop', caption: 'Winter Serenity' },
+  { src: 'https://images.unsplash.com/photo-1708500450505-4d5bd3282c54?q=80&w=716&auto=format&fit=crop',  caption: 'Travel Destination' },
+  { src: 'https://images.unsplash.com/photo-1696679492271-184101a8d776?q=80&w=1074&auto=format&fit=crop', caption: "Nature's Canvas" },
+  { src: 'https://images.unsplash.com/photo-1668173443752-bdec2fbb3c79?q=80&w=1074&auto=format&fit=crop', caption: 'Scenic Routes' },
+  { src: 'https://images.unsplash.com/photo-1609412489711-2f037d8f4c77?q=80&w=627&auto=format&fit=crop',  caption: 'Timeless Kashmir' }
+];
+
+var cur = 0;
+var lb     = document.getElementById('lightbox');
+var lbImg  = document.getElementById('lb-img');
+var lbCap  = document.getElementById('lb-caption');
+var lbCtr  = document.getElementById('lb-counter');
+
+function updateLB(i) {
+  lbImg.classList.add('fade');
+  setTimeout(function() {
+    cur = (i + photos.length) % photos.length;
+    lbImg.src = photos[cur].src;
+    lbImg.alt = photos[cur].caption + ' – Vellfire Holidays Kashmir';
+    lbCap.textContent = photos[cur].caption;
+    lbCtr.textContent = (cur + 1) + ' / ' + photos.length;
+    lbImg.classList.remove('fade');
+  }, 180);
+}
+
+window.openLB = function(i) {
+  cur = i;
+  lbImg.src = photos[cur].src;
+  lbImg.alt = photos[cur].caption + ' – Vellfire Holidays Kashmir';
+  lbCap.textContent = photos[cur].caption;
+  lbCtr.textContent = (cur + 1) + ' / ' + photos.length;
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+};
+
+function closeLB() {
+  lb.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('lb-close').onclick = closeLB;
+document.getElementById('lb-prev').onclick  = function() { updateLB(cur - 1); };
+document.getElementById('lb-next').onclick  = function() { updateLB(cur + 1); };
+
+/* Close on backdrop click */
+lb.addEventListener('click', function(e) {
+  if (e.target === lb) closeLB();
+});
+
+/* Keyboard navigation */
+document.addEventListener('keydown', function(e) {
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'Escape')      closeLB();
+  if (e.key === 'ArrowRight')  updateLB(cur + 1);
+  if (e.key === 'ArrowLeft')   updateLB(cur - 1);
+});
+
+/* Touch swipe support */
+var touchStartX = 0;
+lb.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+lb.addEventListener('touchend',   function(e) {
+  var diff = touchStartX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 50) diff > 0 ? updateLB(cur + 1) : updateLB(cur - 1);
+});
+
+/* ── Scroll & Nav ── */
+window.addEventListener('scroll', function() {
+  document.getElementById('scrtop').classList.toggle('show', window.scrollY > 400);
+});
+
+document.getElementById('ham').addEventListener('click', function() {
+  this.classList.toggle('open');
+  document.getElementById('mobnav').classList.toggle('open');
+});
+document.getElementById('mobnav').addEventListener('click', function(e) {
+  if (e.target.tagName === 'A') {
+    document.getElementById('ham').classList.remove('open');
+    this.classList.remove('open');
+  }
+});
+
+/* ── Scroll Reveal ── */
+function initReveal() {
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(el) {
+      if (el.isIntersecting) { el.target.classList.add('on'); obs.unobserve(el.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.rv, .rvl, .rvr').forEach(function(el) {
+    if (!el.classList.contains('on')) obs.observe(el);
+  });
+}
+
+/* ── Loader ── */
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    document.getElementById('loader').classList.add('gone');
+    initReveal();
+  }, 1800);
+});
+setTimeout(initReveal, 500);
+</script>
+</body>
+</html>
