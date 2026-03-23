@@ -535,3 +535,14 @@ footer{background:var(--g900);padding:64px 5% 28px}
   .social-row{grid-template-columns:1fr}
   .mob-nav a{padding:9px 24px;font-size:22px}
 }
+@media (max-width: 768px){
+
+  .nav-links{
+    display:none;
+  }
+
+  .hamburger{
+    display:flex;   /* SHOW hamburger */
+  }
+
+}
