@@ -26,7 +26,3 @@ var firebaseConfig = {
   messagingSenderId: "496119158738",
   appId: "1:496119158738:web:7e4621bb998ba080505a0b"
 };
-
-// ── Admin Credentials ──────────────────────────────────────
-var ADMIN_EMAIL = "vellfireholidays@gmail.com";
-var ADMIN_PASS  = "Vellfire@2024";
