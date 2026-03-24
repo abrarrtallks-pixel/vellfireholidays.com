@@ -43,4 +43,11 @@
     <priority>0.7</priority>
   </url>
 
+  <url>
+    <loc>https://vellfireholidays.com/gallery.html</loc>
+    <lastmod>2024-12-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
 </urlset>
