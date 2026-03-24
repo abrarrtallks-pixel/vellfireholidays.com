@@ -1,23 +1,3 @@
-// ============================================================
-//  VELLFIRE HOLIDAYS — FIREBASE CONFIGURATION
-//  ─────────────────────────────────────────────────────────
-//  1. Go to https://console.firebase.google.com
-//  2. Create/open your project
-//  3. Project Settings → Your apps → Web App → Copy config
-//  4. Paste config below replacing placeholder values
-//  5. Firestore → Create database → Start in test mode
-//  6. Firestore → Rules → Paste and Publish:
-//
-//     rules_version = '2';
-//     service cloud.firestore {
-//       match /databases/{database}/documents {
-//         match /{document=**} {
-//           allow read, write: if true;
-//         }
-//       }
-//     }
-// ============================================================
-
 var firebaseConfig = {
   apiKey: "AIzaSyB1dePpXbjM2vtUXX-KR8_P2WsgOuDLR7w",
   authDomain: "tour-and-travel-cc67a.firebaseapp.com",
